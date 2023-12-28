@@ -29,28 +29,7 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Get workspaces
-        uses: sergeysova/jq-action@v2
-        id: workspaces
-        with:
-          cmd: (cat package.json | jq -r '.workspaces | @sh') | tr -d \'
         
-      - name: Rearrange for Pages
-        run: |
-          workspaces=(${{ steps.workspaces.outputs.value }})
-          for ws in "${workspaces[@]}"
-          do
-            draft=$(cat ${ws}/package.json | jq -r '.draft // false | @sh')
-            if [[ $draft != 'true' && $ws != 'common' && $ws != 'tests' ]]
-            then
-              mv ${ws}/dist dist/${ws}
-              # echo the command
-              echo "mv ${ws}/dist dist/${ws}"
-              ls -l dist/${ws}
-            fi
-          done
-
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:

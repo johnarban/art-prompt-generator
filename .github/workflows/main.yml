@@ -1,0 +1,61 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      master
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: ${{ github.repository_owner == 'johnarban' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+    
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.17.1'
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+
+      - name: Get workspaces
+        uses: sergeysova/jq-action@v2
+        id: workspaces
+        with:
+          cmd: (cat package.json | jq -r '.workspaces | @sh') | tr -d \'
+        
+      - name: Rearrange for Pages
+        run: |
+          workspaces=(${{ steps.workspaces.outputs.value }})
+          for ws in "${workspaces[@]}"
+          do
+            draft=$(cat ${ws}/package.json | jq -r '.draft // false | @sh')
+            if [[ $draft != 'true' && $ws != 'common' && $ws != 'tests' ]]
+            then
+              mv ${ws}/dist dist/${ws}
+              # echo the command
+              echo "mv ${ws}/dist dist/${ws}"
+              ls -l dist/${ws}
+            fi
+          done
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          # ssh-key: ${{ secrets.DEPLOY_KEY }}

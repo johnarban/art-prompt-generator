@@ -8,7 +8,7 @@
       
       <!-- button to generate -->
       <v-btn @click="generatePrompt()">
-        Generate <v-icon>mdi-refresh</v-icon>
+        Generate
       </v-btn>
       
 

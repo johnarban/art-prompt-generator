@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite --host preview",
+    "preview": "vite --host localhost",
     "clean": "rimraf dist"
   },
   "dependencies": {

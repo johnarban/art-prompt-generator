@@ -2,12 +2,6 @@
   <v-app theme="dark">
     <v-main>
       
-      
-      <!-- create chips to preview theme colors -->
-      <!-- <v-chip v-for="color in themeColors" :key="color" :color="color">
-        {{ color }}
-      </v-chip> -->
-      
       <v-container fluid>
         
         <v-row class="ga-8" align="center" justify="center">
@@ -127,7 +121,7 @@ import { ref, onMounted } from 'vue'
 details {
   margin-top: 2rem;
   font-size: calc(var(--font-size) * 0.8);
-  color: rgb(var(--v-theme-on-surface-bright));
+  color: white;
   summary {
     cursor: pointer;
   }

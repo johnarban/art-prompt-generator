@@ -8,7 +8,7 @@
       
       <!-- button to generate -->
       <v-btn @click="generatePrompt()">
-        Generate
+        Generate <v-icon>mdi-refresh</v-icon>
       </v-btn>
       
 
@@ -23,7 +23,6 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import HelloWorld from '@/components/HelloWorld.vue'
   
   // color scheme: 
   // subject matteer
@@ -60,3 +59,21 @@
 });
   
 </script>
+
+<style lang="less">
+
+:root {
+  // set a default font stack
+  --font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-size: 1rem;
+  --font-weight: 400;
+  --line-height: 1.5;
+  font-family: var(--font-stack);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  line-height: var(--line-height);
+}
+
+</style>
+
+  

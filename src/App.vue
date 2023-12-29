@@ -127,7 +127,7 @@ import { ref, onMounted } from 'vue'
 details {
   margin-top: 2rem;
   font-size: calc(var(--font-size) * 0.8);
-  color: rgb(122, 131, 255);
+  color: rgb(var(--v-theme-on-surface-bright));
   summary {
     cursor: pointer;
   }
@@ -149,6 +149,7 @@ details {
   font-size: calc(var(--font-size) * 2);
   font-weight: 600;
   text-transform: uppercase;
+  line-height: 1.2;
   color: white;
 }
 

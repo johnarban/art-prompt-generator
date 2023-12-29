@@ -36,7 +36,7 @@ export default createVuetify({
           accent: colors.deepOrange.accent4,
           error: colors.red.accent3,
           background: '#121212',
-          surface: colors.deepPurple.accent4,
+          surface: colors.indigo.darken4,
         },
       }
       

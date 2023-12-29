@@ -13,7 +13,7 @@
       
 
       <h2>
-        {{ randomMedium }} | {{ randomSubject }} | {{ randomColorScheme }}
+      {{ randomMedium }} | {{ randomSubject }} | {{ randomColorScheme }}
       </h2>
       
       
@@ -21,43 +21,34 @@
   </v-app>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  
-  // color scheme: 
-  // subject matteer
-  // media : watercolor, pastels, oil paint, gouache, alcohol markers, pencil, digital
-  // 
-  export default defineComponent({
-    name: 'Art Prompt Generator',
 
-    data() {
-      return {
-        medium: ['watercolor', 'pastels', 'oil paint', 'gouache', 'alcohol markers', 'pencil', 'digital'],
-        subject: ['landscape', 'portrait', 'still life', 'abstract', 'animals', 'people', 'architecture', 'botanical'],
-        colorScheme: ['red', 'green', 'blue', 'yellow', 'black & white', 'purple', 'orange', 'pink'],
-        randomMedium: '',
-        randomSubject: '',
-        randomColorScheme: ''
-      }
-    },
-    
-    methods: {
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+
+
+  const medium = ref(['watercolor', 'pastels', 'oil paint', 'gouache', 'alcohol markers', 'pencil', 'digital'])
+  const subject = ref(['landscape', 'portrait', 'still life', 'abstract', 'animals', 'people', 'architecture', 'botanical'])
+  const colorScheme = ref(['red', 'green', 'blue', 'yellow', 'black & white', 'purple', 'orange', 'pink'])
+  const randomMedium = ref('')
+  const randomSubject = ref('')
+  const randomColorScheme = ref('')
+
+  const pickRandom = (array: string[]) => {
+    return array[Math.floor(Math.random() * array.length)]
+  }
+
+  const generatePrompt = () => {
+    console.log('generate prompt');
+    randomMedium.value = pickRandom(medium.value);
+    randomSubject.value = pickRandom(subject.value);
+    randomColorScheme.value = pickRandom(colorScheme.value);
+  }
+
       
-      pickRandom(array: string[]) {
-        return array[Math.floor(Math.random() * array.length)]
-      },
-      
-      generatePrompt(): void {
-        console.log('generate prompt');
-        this.randomMedium = this.pickRandom(this.medium);
-        this.randomSubject = this.pickRandom(this.subject);
-        this.randomColorScheme = this.pickRandom(this.colorScheme);
-      }
-    }
-  
-});
-  
+
+
 </script>
 
 <style lang="less">

@@ -1,20 +1,46 @@
 <template>
-  <v-app>
+  <v-app theme="dark">
     <v-main>
       
-      <h1>
-        Art Prompt Generator
-      </h1>
       
-      <!-- button to generate -->
-      <v-btn @click="generatePrompt()">
-        Generate
+      <!-- create chips to preview theme colors -->
+      <!-- <v-chip v-for="color in themeColors" :key="color" :color="color">
+        {{ color }}
+      </v-chip> -->
+      
+      <v-container fluid>
+        
+        <v-row class="ga-8" align="center" justify="center">
+        <h1>
+          Art Prompt Generator
+        </h1>
+        <v-btn prepend-icon="mdi-refresh" @click="generatePrompt()">
+        Re-Generate
       </v-btn>
+      </v-row>
       
-
-      <h2>
-      {{ randomMedium }} | {{ randomSubject }} | {{ randomColorScheme }}
-      </h2>
+        <v-row>
+          <v-col v-for="([key, value], _) in randomPrompt" :key="key">
+            <v-card class="prompt__item">
+                <v-card-title>  <span class="prompt__key">{{ key }} </span> </v-card-title>
+                <v-card-text> 
+                  <p class="prompt__value">{{ value }} </p>
+                  <details>
+                    <summary> All {{ key }} options </summary>
+                    <ul>
+                      <li v-for="option in promptOptions.get(key)" :key="option">
+                        {{ option }}
+                      </li>
+                    </ul>
+                  </details>
+                </v-card-text>
+                
+            </v-card>
+          </v-col>
+        </v-row>
+      
+      </v-container>
+          
       
       
     </v-main>
@@ -24,26 +50,54 @@
 
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { on } from 'events';
+import { ref, onMounted } from 'vue'
 
+  onMounted(() => {
+    generatePrompt()
+  })
 
+  const medium = ['watercolor', 'pastels', 'oil paint', 'gouache', 'alcohol markers', 'pencil', 'digital']
+  const subject = ['landscape', 'portrait', 'still life', 'abstract', 'animals', 'people', 'architecture', 'botanical']
+  const colorScheme = ['red', 'green', 'blue', 'yellow', 'black & white', 'purple', 'orange', 'pink']
+  
+  // vueitfiy theeme colors
+  const themeColors = [
+    'primary',
+    'secondary',
+    'accent',
+    'info',
+    'success',
+    'warning',
+    'error'
+  ]
+  
+  const promptOptions = ref(new Map([
+    ['medium', medium],
+    ['subject', subject],
+    ['color scheme', colorScheme]
+  ]))
+  
+  // create a random prompt with keys from promptOptions all initialized to ''
+  const randomPrompt = ref(new Map(
+    [...promptOptions.value.keys()].map(key => [key, ''])
+    ))
 
-  const medium = ref(['watercolor', 'pastels', 'oil paint', 'gouache', 'alcohol markers', 'pencil', 'digital'])
-  const subject = ref(['landscape', 'portrait', 'still life', 'abstract', 'animals', 'people', 'architecture', 'botanical'])
-  const colorScheme = ref(['red', 'green', 'blue', 'yellow', 'black & white', 'purple', 'orange', 'pink'])
-  const randomMedium = ref('')
-  const randomSubject = ref('')
-  const randomColorScheme = ref('')
+  
 
   const pickRandom = (array: string[]) => {
+    // pick a random item from an array
     return array[Math.floor(Math.random() * array.length)]
   }
 
   const generatePrompt = () => {
     console.log('generate prompt');
-    randomMedium.value = pickRandom(medium.value);
-    randomSubject.value = pickRandom(subject.value);
-    randomColorScheme.value = pickRandom(colorScheme.value);
+    
+    randomPrompt.value.forEach((_, key) => {
+      randomPrompt.value.set(key, pickRandom(promptOptions.value.get(key) ?? []))
+    })
+    
+    
   }
 
       
@@ -63,6 +117,39 @@
   font-size: var(--font-size);
   font-weight: var(--font-weight);
   line-height: var(--line-height);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+details {
+  margin-top: 2rem;
+  font-size: calc(var(--font-size) * 0.8);
+  color: rgb(122, 131, 255);
+  summary {
+    cursor: pointer;
+  }
+  
+  ul {
+    list-style: none;
+    padding-left: 0.75rem;
+  }
+}
+
+.prompt__key {
+  font-size: calc(var(--font-size) * 1.2);
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #ccc;
+}
+
+.prompt__value {
+  font-size: calc(var(--font-size) * 2);
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
 }
 
 </style>
